@@ -66,10 +66,17 @@ class BrainGraphDataset(Dataset):
         """Return number of graphs in dataset."""
         return len(self._indices)
 
+    def indices(self):
+        """Return the indices mapping for this dataset."""
+        return range(len(self._indices))
+    
     def get(self, idx: int) -> Data:
         """
         Get a single graph.
 
+        Args:
+            idx: Index in range [0, len(self._indices))
+        
         Returns:
             PyTorch Geometric Data object with:
             - x: Node features (70 x D)
@@ -80,7 +87,7 @@ class BrainGraphDataset(Dataset):
             - y_creativity: Normalized creativity score
             - age: Age (optional covariate)
         """
-        # Get actual subject index
+        # Map idx (0 to len-1) to actual subject index
         subj_idx = self._indices[idx]
 
         # Get adjacency and features
