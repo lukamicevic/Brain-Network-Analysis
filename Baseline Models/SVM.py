@@ -9,22 +9,24 @@ from sklearn.model_selection import train_test_split, cross_val_score
 from sklearn.preprocessing import StandardScaler
 from sklearn.svm import SVC
 from sklearn.metrics import classification_report, confusion_matrix
+from pathlib import Path
 
 # CONFIGURATION
-data_dir = r"/Users/ishani/SML Data/brainnetworks/smallgraphs"   # folder with all .mat files
-label_file = r"/Users/ishani/SML Data/brainnetworks/metainfo.csv"
+BASE_DIR = Path(__file__).resolve().parent.parent  
+DATA_DIR = BASE_DIR / "data" / "smallgraphs"
+LABEL_FILE = BASE_DIR / "data" / "metainfo.csv"
 
 X = []
 subject_ids = []
 
 # FIX 
-files = [f for f in os.listdir(data_dir) if f.endswith(".mat")]
+files = [f for f in os.listdir(DATA_DIR) if f.endswith(".mat")]
 files = sorted(files, key=lambda x: x.split("_")[0])   # sort by URSI ID
 
 
 for fname in files:
     if fname.endswith('.mat'):
-        fpath = os.path.join(data_dir, fname)
+        fpath = os.path.join(DATA_DIR, fname)
         mat = sio.loadmat(fpath)
         
         
@@ -53,7 +55,7 @@ X = np.array(X)
 print(f"Loaded {len(X)} subjects, feature vector size: {X.shape[1]}")
 
 # LOAD LABELS
-labels_df = pd.read_csv(label_file)
+labels_df = pd.read_csv(LABEL_FILE)
 labels_df['URSI'] = labels_df['URSI'].astype(str).str.strip()
 
 

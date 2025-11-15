@@ -11,6 +11,7 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.decomposition import PCA
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import accuracy_score, confusion_matrix, classification_report
+from pathlib import Path
 
 #SMOTE for balancing Subject_type
 try:
@@ -21,8 +22,9 @@ except ImportError:
     USE_SMOTE = False
 
 # CONFIGURATION
-DATA_DIR = r"/Users/ishani/SML Data/brainnetworks/smallgraphs"
-LABEL_FILE = r"/Users/ishani/SML Data/brainnetworks/metainfo.csv"
+BASE_DIR = Path(__file__).resolve().parent.parent  
+DATA_DIR = BASE_DIR / "data" / "smallgraphs"
+LABEL_FILE = BASE_DIR / "data" / "metainfo.csv"
 
 N_COMPONENTS = 100   # PCA components
 N_JOBS = -1          
