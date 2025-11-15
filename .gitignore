@@ -1,0 +1,40 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg-info/
+dist/
+build/
+
+# Virtual environments
+venv/
+env/
+ENV/
+
+# Jupyter
+.ipynb_checkpoints/
+*.ipynb
+
+# Results and outputs
+results/
+*.pkl
+*.log
+*.pth
+*.pt
+
+# Data (if you want to exclude large data files)
+# Uncomment if needed:
+# data/smallgraphs/*.mat
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+.DS_Store
