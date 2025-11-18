@@ -226,7 +226,6 @@ def evaluate_baselines(
             f"Spearman rho: {rho_mlp_cre:.3f}"
         )
 
-        # Gradient Boosting regressor
         gb_reg_cre = GradientBoostingRegressor(
             n_estimators=300,
             learning_rate=0.05,
@@ -277,7 +276,6 @@ def main():
 ...     )
 ...     args = parser.parse_args()
 ... 
-...     # Load data
 ...     loader = BrainDataLoader(args.data_dir)
 ...     adj_list, feat_list, labels = loader.load_all_subjects()
 ... 
