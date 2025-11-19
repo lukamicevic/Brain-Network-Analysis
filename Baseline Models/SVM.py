@@ -68,6 +68,7 @@ y_math = np.array(labels_df['Subject_type'])
 
 tasks = {
     'Gender (Male=0, Female=1)': y_gender,
+    'Subject Type (0=Normal, 1=Math, 2=Creative)': y_math
     #'Math capability (Normal=0, High=1)': y_math
 }
 print("Math class distribution:", np.bincount(labels_df['Subject_type']))
@@ -104,3 +105,4 @@ def train_and_evaluate(X, y, task_name):
 
 for name, y in tasks.items():
     train_and_evaluate(X, y, name)
+
