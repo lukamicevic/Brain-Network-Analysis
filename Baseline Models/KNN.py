@@ -26,7 +26,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 DATA_DIR = BASE_DIR / "data" / "smallgraphs"
 LABEL_FILE = BASE_DIR / "data" / "metainfo.csv"
 
-N_COMPONENTS = 100  # PCA components
+N_COMPONENTS = 70  # PCA components
 N_JOBS = -1         
 
 X, subject_ids = [], []
@@ -80,8 +80,16 @@ def run_knn_classification(X, y, task_name):
         X, y, stratify=y, test_size=0.2, random_state=50
     )
 
+    # 🔹 SMOTE ONLY ON TRAINING DATA, ONLY FOR SUBJECT TYPE
+    if USE_SMOTE and "Subject Type" in task_name:
+        print("\nApplying SMOTE to training data for", task_name)
+        print("Class distribution before SMOTE:", np.bincount(y_train))
+        sm = SMOTE(random_state=50, k_neighbors=3)
+        X_train, y_train = sm.fit_resample(X_train, y_train)
+        print("Class distribution after SMOTE:", np.bincount(y_train))
+
     param_grid = {
-        "n_neighbors": [3, 5, 7, 9, 11],
+        "n_neighbors": [3, 5 , 7, 9, 11],
         "weights": ["uniform", "distance"],
         "p": [1, 2]  # 1=Manhattan, 2=Euclidean
     }
@@ -109,19 +117,16 @@ def run_knn_classification(X, y, task_name):
     cv_acc = cross_val_score(best_knn, X, y, cv=5, scoring="accuracy").mean()
     print(f"Cross-validation Accuracy: {cv_acc:.3f}")
 
-#SEX CLASSIFICATION
+
+# SEX CLASSIFICATION (no SMOTE)
 y_sex = df["Sex"].values
 run_knn_classification(X_pca, y_sex, "Sex (Male=0, Female=1)")
 
-#SUBJECT TYPE CLASSIFICATION
+
+# SUBJECT TYPE CLASSIFICATION (SMOTE on train only)
 y_subject = df["Subject_type"].values
-X_subject = X_pca.copy()
-
-
-if USE_SMOTE:
-    print("\nBalancing Subject_type classes with SMOTE...")
-    sm = SMOTE(random_state=50, k_neighbors=3)
-    X_subject, y_subject = sm.fit_resample(X_subject, y_subject)
-    print("Balanced Subject_type distribution:", np.bincount(y_subject))
-
-run_knn_classification(X_subject, y_subject, "Subject Type (0=Normal, 1=Math, 2=Creative)")
+run_knn_classification(
+    X_pca,
+    y_subject,
+    "Subject Type (0=Normal, 1=Math, 2=Creative)"
+)
